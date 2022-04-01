@@ -1,0 +1,63 @@
+[
+	{
+		"schema": "Game",
+		"name": {
+			"type": "String",
+			"required": true
+		},
+		"jpname": {
+			"type": "String",
+			"required": false
+		},
+		"images": {
+			"type": "String",
+			"required": true
+		},
+		"region": {
+			"type": "Array",
+			"required": true,
+			"multi": false,
+			"enum": [
+				"Japan",
+				"USA",
+				"Europe",
+				"Other"
+			]
+		},
+		"condition": {
+			"type": "Array",
+			"required": false,
+			"multi": false,
+			"enum": [
+				"Mint",
+				"Good",
+				"Bad"
+			]
+		},
+		"kit": {
+			"type": "Array",
+			"required": false,
+			"multi": true,
+			"enum": [
+				"Cartridge",
+				"Disk",
+				"Box",
+				"Manual",
+				"Bonus",
+				"Limited"
+			]
+		},
+		"note": {
+			"type": "String",
+			"required": false
+		},
+		"createdAt": {
+			"type": "Number",
+			"required": true
+		},
+		"updatedAt": {
+			"type": "Number",
+			"required": true
+		}
+	}
+]
