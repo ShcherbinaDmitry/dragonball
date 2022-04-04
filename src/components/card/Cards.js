@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useImmer } from 'use-immer';
 import Card from './Card';
-import DBService from '../../service/dbService';
+import AppContext from '../app-context';
 
 const Cards = (props) => {
-  const dbService = new DBService();
-  const [games, setGames] = useState({});
+  const { dbService } = useContext(AppContext);
+  //const [games, setGames] = useState({});
+  const { games } = props;
   
-  useEffect(() => {
-    dbService.getGames().then((data) => {
-      setGames(data);
-    })
-  }, []);
 
   return (
     <div className="container">
       <div className="row">
-        {Object.entries(games).map(([key, game]) => <Card key={key} game={game}/>)}
+        {games.map((game) => <Card key={game._id} game={game}/>)}
       </div>
     </div>
   );

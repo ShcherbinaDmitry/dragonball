@@ -1,6 +1,6 @@
 export default class DBService {
   constructor() {
-    this._apiBase = 'http://localhost:3001/games';
+    this._apiBase = 'http://localhost:3000/api/games';
     console.log('Making new dbservice');
   }
 
@@ -15,15 +15,45 @@ export default class DBService {
     return await result.json();
   }
 
-  addGame = async () => {
+  getGame = async (id) => {
+    console.log('Getting a game by id');
+  }
 
+  addGame = async (game) => {
+    console.log('Adding a game');
+    console.log(game);
+
+    const game1 = {
+      name: 'DragonBall Game Generic Name 1',
+      jpname: 'Japanese Name ',
+      image: './path_to_image.jpg',
+      region: 'Europe',
+      condition: 'Mint',
+      note: 'Generic description',
+      platform: 'PS4',
+    };
+
+    const res = await fetch(this._apiBase, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(game),
+    });
+
+    console.log(res);
   }
 
   updateGame = async (id) => {
-
+    console.log('Updating a game');
   }
 
   deleteGame = async (id) => {
+    console.log('Deleting a game');
+    const res = await fetch(`${this._apiBase}/${id}`, {
+      method: 'DELETE',
+    })
 
+    console.log(res);
   }
 }
