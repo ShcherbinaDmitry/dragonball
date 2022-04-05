@@ -45,6 +45,11 @@ const initialState = {
 const gamesSlice = createSlice({
   name: 'games',
   initialState,
+  reducers: {
+    filterGames: (state, action) => {
+      console.log('Filtered');
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGames.fulfilled, (state, action) => {
@@ -55,7 +60,7 @@ const gamesSlice = createSlice({
         console.log('Rejected');
       })
       .addCase(addGame.fulfilled, (state, action) => {
-        state.games.unshift(action.payload);
+        state.games = [action.payload, ...state.games];
       })
       .addCase(updateGame.fulfilled, (state, action) => {
         const { payload } = action;
@@ -72,5 +77,7 @@ const gamesSlice = createSlice({
       });
   },
 });
+
+export const { filterGames } = gamesSlice.actions;
 
 export default gamesSlice.reducer;
