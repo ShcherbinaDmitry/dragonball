@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import AddModal from '../modal';
-import AppContext from '../app-context';
+
 
 const Topbar = (props) => {
   const [modal, setModal] = useState('');
@@ -8,7 +8,6 @@ const Topbar = (props) => {
 
   const handleClick = () => {
     setModal(!modal);
-    // dbService.addGame();
   }
 
   return (

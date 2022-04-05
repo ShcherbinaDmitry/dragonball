@@ -1,18 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useImmer } from 'use-immer';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchGames } from '../../slices/gamesSlice';
 import Card from './Card';
-import AppContext from '../app-context';
+
 
 const Cards = (props) => {
-  const { dbService } = useContext(AppContext);
-  //const [games, setGames] = useState({});
-  const { games } = props;
+  const dispatch = useDispatch();
+
+  const games = useSelector((state) => state.games.games);
   
+  useEffect(() => {
+    dispatch(fetchGames())
+  }, [dispatch]);
 
   return (
     <div className="container">
       <div className="row">
-        {games.map((game) => <Card key={game._id} game={game}/>)}
+         {games.map((game) => <Card key={game._id} game={game} handleRemove={1}/>)}
       </div>
     </div>
   );

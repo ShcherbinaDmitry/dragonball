@@ -1,18 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, {  useState } from 'react';
 import cn from 'classnames';
 
 import AddModal from '../modal';
 import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
-// import '@fortawesome/fontawesome-svg-core';
-
-import AppContext from '../app-context';
 
 const Card = (props) => {
   const [modal, setModal] = useState('');
-
-  const { dbService } = useContext(AppContext);
-
   const { 
     game: {
       _id,
@@ -35,7 +29,7 @@ const Card = (props) => {
     setModal(!modal);
   };
 
-  const Modal = modal ? <AddModal handleModal={setModal} value={props.game} type='edit'/> : null;
+  const Modal = modal ? <AddModal handleModal={setModal} values={props.game} type='edit'/> : null;
 
 
   const isNew = ((Date.now() - new Date(createdAt)) / 1000 * 60 * 60 * 24 * 7) > 0;
@@ -44,15 +38,14 @@ const Card = (props) => {
   const badges = tags
     .split(',')
     .map((badge) => <span key={`${badge}-${_id}`} className="col mb-3 p-1 bg-success badge badge-success">{badge}</span>)
-  
-  // console.log(badges);
+
 
   return (
     <div className="col col-12 col-sm-6 col-md-4 col-lg-4">
       <div className="card">
         <img src="https://images.immediate.co.uk/production/volatile/sites/3/2021/01/Dragon-Ball-1-a5dc289.jpg?quality=90&webp=true&resize=864,576"
-        className="card-img-top"
-        alt="Game cover"/>
+          className="card-img-top"
+          alt="Game cover"/>
         <div className="card-body">
           <h5 className="card-title">Name: {name}</h5>
           <p className="card-text">Japanese name: {jpname}</p>
@@ -61,13 +54,12 @@ const Card = (props) => {
           <p className="card-text">Description: {note}</p>
           <p className="card-text">Kit: {kit}</p>
           <p className="card-text">Condition: {condition}</p>
+          <p className="card-text">New: {isNew.toString()}</p>
           {badges}
           <button type="btn" className="btn col-4 m-2" onClick={handleClick}>
             <FontAwesomeIcon icon={faPen} className="fa-xl"/>
           </button>
-          <button className="btn btn-primary col-4" onClick={() => dbService.deleteGame(_id)}>
-            <FontAwesomeIcon icon={faTrash} className="fa-xl"/>
-          </button>
+
         </div>
       </div>
       {Modal}
