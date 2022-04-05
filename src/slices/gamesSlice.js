@@ -48,6 +48,7 @@ const gamesSlice = createSlice({
   reducers: {
     filterGames: (state, action) => {
       console.log('Filtered');
+      console.log(action);
     },
   },
   extraReducers: (builder) => {

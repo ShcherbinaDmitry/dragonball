@@ -35,19 +35,21 @@ const Cards = (props) => {
     <div className="container">
       <div className="row">
          {gamesChunks[currentPage].items.map((game) => <Card key={game._id} game={game}/>)}
-          <div className="col col-12 mt-3">
-            <span>Показывать по </span>
-            <Form.Select size="lg" onChange={(e) => handleSize(e.target.value)} aria-label="Размер страницы">
-              {pageSizes.map((item) => <option key={item} value={item}>{item}</option>)}
-            </Form.Select>
-          </div>
-          <Pagination className="col-12 mt-3">
-            {gamesChunks.map(({ pageNumber }) => (
-              <Pagination.Item activeLabel="" key={pageNumber} onClick={() => setCurrentPage(pageNumber)} active={pageNumber === currentPage}>
-                {pageNumber + 1}
-              </Pagination.Item>
-            ))}
-          </Pagination>
+      </div>
+      <div className="row">
+        <div className="col-2">
+          <span>Показывать по </span>
+          <Form.Select size="lg" onChange={(e) => handleSize(e.target.value)} aria-label="Размер страницы">
+            {pageSizes.map((item) => <option key={item} value={item}>{item}</option>)}
+          </Form.Select>
+        </div>
+        <Pagination className="col-12 mt-3">
+          {gamesChunks.map(({ pageNumber }) => (
+            <Pagination.Item activeLabel="" key={pageNumber} onClick={() => setCurrentPage(pageNumber)} active={pageNumber === currentPage}>
+              {pageNumber + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
       </div>
     </div>
   );
