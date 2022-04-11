@@ -15,7 +15,7 @@ const getModalInfo = {
     infoRequired: true,
     isRemovable: false,
   },
-  'edit': {
+  'edit': { 
     header: 'Редактировать игру',
     handler: updateGame,
     infoRequired: false,
@@ -24,7 +24,13 @@ const getModalInfo = {
 };
 
 const kitValues = [
-  { name: 1, value:1 }
+  { name: 'Картридж', value: 'Cartridge'},
+  { name: 'Диск', value: 'Disk'},
+  { name: 'Коробка', value: 'Box'},
+  { name: 'Бонусный комплект', value: 'Bonus'},
+  { name: 'Руководство', value: 'Manual'},
+  { name: 'Лимитированное издание', value: 'Limited'},
+  
 ];
 
 const ModalComponent = ({ handleModal, type, values = {} }) => {
@@ -40,7 +46,13 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
   const handleRemove = () => {
     dispatch(removeGame(values._id));
     handleModal(false);
-  }
+  };
+
+  const handleMultiselect = (selected) => {
+    const stringValues = selected.map((kit) => kit.value);
+    
+    formik.setFieldValue('kit', stringValues);
+  };
 
   const gameSchema = yup.object().shape({
     name: yup.string().required('Required'),
@@ -148,28 +160,19 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             <option value="Good">Хорошее</option>
             <option value="Bad">Ужасное</option>
           </select>
-          {/* <select name="kit" id="kit" onChange={formik.handleChange} className="select form-select mb-3" multiple>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-            <option value="4">Four</option>
-            <option value="5">Five</option>
-          </select>
-          <label htmlFor="kit" className="col form-label select-label">Комлпектация</label> */}
-          {/* <select
+          <label htmlFor="kit" className="form-label select-label">Комплектация</label>
+          <Multiselect
+            className="mb-3"
+            options={kitValues}
+            onSelect={handleMultiselect}
+            onRemove={handleMultiselect}
+            placeholder="Комплектация"
+            selectedValues={kitValues.filter((kit) => formik.initialValues.kit.includes(kit.value))}
+            displayValue="name"
             name="kit"
             id="kit"
-            onChange={formik.handleChange}
-            className="form-select mb-3"
-          >
-            <option value="Cartridge">Картридж</option>
-            <option value="Disk">Диск</option>
-            <option value="Box">Коробка</option>
-            <option value="Manual">Руководство</option>
-            <option value="Bonus">Бонусный комплект</option>
-            <option value="Limited">Лимитированное издание</option>
-          </select> */}
-
+            value={formik.values.kit}
+          />
           <div className="form-floating mb-3">
             <input
               className="form-control"
