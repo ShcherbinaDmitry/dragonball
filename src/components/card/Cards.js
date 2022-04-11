@@ -9,6 +9,7 @@ const pageSizes = [6, 12, 24, 60];
 
 const Cards = (props) => {
   const dispatch = useDispatch();
+  
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(pageSizes[0]);
 

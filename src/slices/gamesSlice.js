@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { orderBy } from 'lodash';
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -40,6 +41,10 @@ export const updateGame = createAsyncThunk(
 
 const initialState = {
   games: [],
+  activeSort: {
+    type: 'updatedAt',
+    asc: true,
+  },
 };
 
 const gamesSlice = createSlice({
@@ -47,21 +52,35 @@ const gamesSlice = createSlice({
   initialState,
   reducers: {
     filterGames: (state, action) => {
-      console.log('Filtered');
-      console.log(action);
+    },
+    sortGames: (state, action) => {
+
+      const { payload } = action;
+
+      if (state.activeSort.type === payload) {
+        state.activeSort.asc = !state.activeSort.asc;
+      } else {
+        state.activeSort.type = payload;
+        state.activeSort.asc = true;
+      }
+
+      const order = state.activeSort.asc ? 'asc' : 'desc';
+
+      state.games = orderBy(state.games, [state.activeSort.type], [order]);
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGames.fulfilled, (state, action) => {
-        console.log('Fulfilled!');
         state.games = action.payload;
       })
       .addCase(fetchGames.rejected, (state, action) => {
-        console.log('Rejected');
       })
       .addCase(addGame.fulfilled, (state, action) => {
         state.games = [action.payload, ...state.games];
+      })
+      .addCase(addGame.rejected, (state, action) => {
+        console.log(action.error);
       })
       .addCase(updateGame.fulfilled, (state, action) => {
         const { payload } = action;
@@ -79,6 +98,6 @@ const gamesSlice = createSlice({
   },
 });
 
-export const { filterGames } = gamesSlice.actions;
+export const { filterGames, sortGames } = gamesSlice.actions;
 
 export default gamesSlice.reducer;

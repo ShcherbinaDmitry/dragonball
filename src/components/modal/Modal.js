@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { Modal, Form } from 'react-bootstrap';
 import Multiselect from 'multiselect-react-dropdown';
 import * as yup from 'yup';
+import cn from 'classnames';
 
 import { addGame, removeGame, updateGame } from '../../slices/gamesSlice';
 
@@ -37,7 +38,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
   const dispatch = useDispatch();
   const { header, handler, infoRequired, isRemovable } = getModalInfo[type];
   const inputEl = useRef(null);
-  const [isValid, setValidation] = useState(false);
+  const [isInvalid, setValidation] = useState(false);
 
   useEffect(() => {
     inputEl.current.focus();
@@ -55,13 +56,13 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
   };
 
   const gameSchema = yup.object().shape({
-    name: yup.string().required('Required'),
+    name: yup.string().min(6).required('Required'),
     jpname: yup.string(),
     image: yup.string().required('Required'),
     platform: yup.string().required('Required'),
     region: yup.string().required('Required'),
     condition: yup.string(),
-    kit: yup.string(),
+    kit: yup.array(),
     note: yup.string(),
   });
 
@@ -78,8 +79,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
       ...values,
     },
     onSubmit: (values) => {
-      console.log('Submitted');
-      console.log(values);
+      formik.validateForm();
       setValidation(false);
 
       try {
@@ -87,6 +87,8 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
         handleModal(false);
       } catch (err) { 
         console.log('Got an error');
+        setValidation(true);
+        alert('Error!');
         console.log(err.message);
       }
     },
@@ -101,18 +103,22 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={formik.handleSubmit}>
+          <Form.Control.Feedback type="invalid" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
+          
           <div className="form-floating mb-3">
             <input
-              className="form-control"
+              className={cn('form-control', {'is-invalid': isInvalid })}
               ref={inputEl}
               onChange={formik.handleChange}
               id="name"
               name="name"
-              required={infoRequired}
+              required
               value={formik.values.name}
+
             />
             <label htmlFor="name">Название игры</label>
           </div>
+
           <div className="form-floating mb-3">
             <input
               className="form-control"
@@ -123,6 +129,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             />
             <label htmlFor="jpname">Название на японском</label>
           </div>
+
           <div className="input-group mb-3">
             <input
               className="form-control"
@@ -134,6 +141,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             />
             <label className="input-group-text" htmlFor="image">Загрузить</label>
           </div>
+
           <div className="form-floating mb-3">
             <input
               className="form-control"
@@ -145,22 +153,33 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             />
             <label htmlFor="input-platform">Платформа</label>
           </div>
+
           <label htmlFor="region" className="form-label select-label">Регион</label>
-          <select value={formik.values.region} name="region" id="region" required={infoRequired} onChange={formik.handleChange} className="form-select mb-3" aria-label="Other">
-            <option>Выбрать регион</option>
+          <select
+            value={formik.values.region}
+            name="region"
+            id="region"
+            required={infoRequired}
+            onChange={formik.handleChange}
+            className="form-select mb-3"
+            >
+            <option value="">Выберите регион</option>
+            <option value="Europe">Европа</option>
             <option value="Japan">Япония</option>
             <option value="USA">США</option>
-            <option value="Europe">Европа</option>
             <option value="Other">Другой регион</option>
-          </select>
+          </select >
+
           <label htmlFor="condition" className="form-label select-label">Состояние</label>
           <select value={formik.values.condition} name="condition" id="condition" onChange={formik.handleChange} className="form-select mb-3" >
-            <option>Состояние</option>
+            <option value="">Состояние</option>
             <option value="Mint">Отличное</option>
             <option value="Good">Хорошее</option>
             <option value="Bad">Ужасное</option>
           </select>
+          
           <label htmlFor="kit" className="form-label select-label">Комплектация</label>
+          
           <Multiselect
             className="mb-3"
             options={kitValues}
@@ -173,16 +192,19 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             id="kit"
             value={formik.values.kit}
           />
+          
           <div className="form-floating mb-3">
             <input
               className="form-control"
               onChange={formik.handleChange}
               id="note"
               name="note"
+
               value={formik.values.note}
             />
             <label htmlFor="input-note">Дополнительно</label>
           </div>
+          
           <input className="btn btn-outline-primary m-3 col-4" type="submit" value='Сохранить' />
           {deleteButton}
         </form>

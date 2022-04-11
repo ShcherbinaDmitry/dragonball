@@ -1,9 +1,5 @@
 import React, {  useState } from 'react';
-
-import ModalComponent from '../modal';
-import { FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faPen, faStar, faSertifi } from '@fortawesome/free-solid-svg-icons';
-
+import ModalComponent from '../modal/Modal.js';
 
 const translation = {
   'USA': 'США',
@@ -47,8 +43,8 @@ const Card = (props) => {
 
   const isNew = ((Date.now() - new Date(createdAt)) / 1000 * 60 * 60 * 24 * 7) > 0;
   const updatedDate = new Date(updatedAt).toLocaleDateString('ru-RU');
-  const badges = [...kit, 'box', 'sddsad', 'dasdasd', '12312312', '31', '323123123asd']
-    .map((badge) => <div key={`${badge}-${id}`} className="col-auto m-1 bg-success badge badge-success">{translation[badge] || badge}</div>);
+  const kitBadges = kit
+    .map((badge) => <div key={`${badge}-${id}`} className="col-auto bg-success badge badge-success">{translation[badge] || badge}</div>);
   const Modal = modal ? <ModalComponent handleModal={setModal} values={props.game} type='edit'/> : null;
 
   return (
@@ -62,15 +58,17 @@ const Card = (props) => {
           {jpname && <p className="card-text">Японкое название: {jpname}</p>}
           <p className="card-text col-6">Регион: {translation[region] || region}</p>
           <p className="card-text col-6">Платформа: {platform}</p>
-          {condition && <p className="card-text col-6">Состояние: {translation[condition] || condition}</p>}
-          <p className="card-text col">New: {isNew.toString()}</p>
-          <p className="card-text">Описание: {note}</p>
-          <p className="card-text">Комплект: {translation[kit] || kit}</p>
-          {badges}
-          <button type="btn" className="btn col-4 m-2" onClick={handleClick}>
-            <FontAwesomeIcon icon={faPen} className="fa-xl"/>
+          {condition && <p className="card-text col-auto">Состояние: {translation[condition] || condition}</p>}
+          {note && <p className="card-text col-12">Описание: {note}</p>}
+          <div className="col-12">
+            {kitBadges}
+          </div>
+          <button type="btn" className="btn btn-outline-primary m-2 col-auto align-self-end" onClick={handleClick}>
+            Редактировать
           </button>
-          <p className="card-text"><small className="text-muted">Последнее обновление: {updatedDate}</small></p>
+          {isNew && <p className="card-text align-self-end col-auto">! Новая !</p>}
+          <p className="card-text align-self-end col-12"><small className="text-muted">Последнее обновление: {updatedDate}</small></p>
+ 
         </div>
       </div>
       {Modal}

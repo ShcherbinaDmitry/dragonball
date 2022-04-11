@@ -1,6 +1,6 @@
 import React from 'react';
-import Cards from '../card';
-import Topbar from '../topbar';
+import Cards from '../card/Cards.js';
+import Topbar from '../topbar/Topbar.js';
 
 const App = () =>  {
   return (
