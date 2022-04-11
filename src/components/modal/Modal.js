@@ -86,10 +86,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
         dispatch(handler(values));
         handleModal(false);
       } catch (err) { 
-        console.log('Got an error');
         setValidation(true);
-        alert('Error!');
-        console.log(err.message);
       }
     },
   });
