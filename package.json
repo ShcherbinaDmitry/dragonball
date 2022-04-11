@@ -19,6 +19,7 @@
     "immutability-helper": "^3.1.1",
     "json-server": "^0.17.0",
     "mdb-ui-kit": "^3.11.0",
+    "multiselect-react-dropdown": "^2.0.21",
     "react": "^18.0.0",
     "react-bootstrap": "^2.2.2",
     "react-dom": "^18.0.0",

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Pagination, Form } from 'react-bootstrap';
-import _ from 'lodash';
+import { chunk } from 'lodash';
 import { fetchGames } from '../../slices/gamesSlice';
 import Card from './Card';
 
-const pageSizes = [5, 10, 20, 50];
+const pageSizes = [6, 12, 24, 60];
 
 const Cards = (props) => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Cards = (props) => {
   const gamesChunks = useSelector((state) => {
     const { games } = state.games;
 
-    const chunks = _.chunk(games, pageSize);
+    const chunks = chunk(games, pageSize);
 
     return chunks.map((items, index) => ({ items, pageNumber: index }));
   });

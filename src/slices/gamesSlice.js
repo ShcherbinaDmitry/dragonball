@@ -34,7 +34,7 @@ export const updateGame = createAsyncThunk(
     const { _id } = game;
 
     await axios.put(`${apiBase}/${_id}`, game)
-    return _id;
+    return game;
   }
 );
 

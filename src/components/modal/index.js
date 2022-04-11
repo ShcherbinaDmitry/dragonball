@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Modal, Form } from 'react-bootstrap';
+import Multiselect from 'multiselect-react-dropdown';
 import * as yup from 'yup';
 
 import { addGame, removeGame, updateGame } from '../../slices/gamesSlice';
@@ -22,11 +23,24 @@ const getModalInfo = {
   },
 };
 
+const kitValues = [
+  { name: 1, value:1 }
+];
+
 const ModalComponent = ({ handleModal, type, values = {} }) => {
-  // console.log(type);
   const dispatch = useDispatch();
   const { header, handler, infoRequired, isRemovable } = getModalInfo[type];
+  const inputEl = useRef(null);
+  const [isValid, setValidation] = useState(false);
 
+  useEffect(() => {
+    inputEl.current.focus();
+  }, []);
+
+  const handleRemove = () => {
+    dispatch(removeGame(values._id));
+    handleModal(false);
+  }
 
   const gameSchema = yup.object().shape({
     name: yup.string().required('Required'),
@@ -38,9 +52,6 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
     kit: yup.string(),
     note: yup.string(),
   });
-
-  const inputEl = useRef(null);
-  const [isValid, setValidation] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -57,7 +68,6 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
     onSubmit: (values) => {
       console.log('Submitted');
       console.log(values);
-      console.log(values.image);
       setValidation(false);
 
       try {
@@ -69,15 +79,6 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
       }
     },
   });
-
-  useEffect(() => {
-    inputEl.current.focus();
-  }, []);
-
-  const handleRemove = () => {
-    dispatch(removeGame(values._id));
-    handleModal(false);
-  }
 
   const deleteButton = isRemovable && <button onClick={handleRemove} className="btn btn-outline-danger m-3">Удалить игру</button>
 
@@ -147,8 +148,15 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             <option value="Good">Хорошее</option>
             <option value="Bad">Ужасное</option>
           </select>
-          <label htmlFor="kit" className="col form-label select-label">Комплектация</label>
-          <select
+          {/* <select name="kit" id="kit" onChange={formik.handleChange} className="select form-select mb-3" multiple>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+            <option value="4">Four</option>
+            <option value="5">Five</option>
+          </select>
+          <label htmlFor="kit" className="col form-label select-label">Комлпектация</label> */}
+          {/* <select
             name="kit"
             id="kit"
             onChange={formik.handleChange}
@@ -160,7 +168,7 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
             <option value="Manual">Руководство</option>
             <option value="Bonus">Бонусный комплект</option>
             <option value="Limited">Лимитированное издание</option>
-          </select>
+          </select> */}
 
           <div className="form-floating mb-3">
             <input
