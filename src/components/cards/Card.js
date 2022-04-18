@@ -43,7 +43,9 @@ const Card = (props) => {
     setModal(!modal);
   };
 
-  const isNew = ((Date.now() - new Date(createdAt)) / 1000 * 60 * 60 * 24 * 7) > 0;
+  const dateDiff = ((Date.now() - new Date(createdAt)) - (1000 * 60 * 60 * 24 * 7));
+  const isNew = dateDiff < 0;
+
   const updatedDate = new Date(updatedAt).toLocaleDateString('ru-RU');
   const kitBadges = kit
     .map((badge) => <div key={`${badge}-${id}`} className="col-auto bg-primary badge">{translation[badge] || badge}</div>);
