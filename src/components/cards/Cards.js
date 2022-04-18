@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Pagination, Form } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 import { chunk } from 'lodash';
-import { fetchGames } from '../../slices/gamesSlice';
+import { fetchGames } from '../../slices/gamesSlice.js';
+
 import Card from './Card';
+import Spinner from '../spinner/spinner.js';
 
 const pageSizes = [6, 12, 24, 60];
 
 const Cards = (props) => {
   const dispatch = useDispatch();
-  
+
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(pageSizes[0]);
 
+  const uiState = useSelector((state) => state.games.uiState);
   const gamesChunks = useSelector((state) => {
     const { games } = state.games;
 
@@ -30,7 +34,16 @@ const Cards = (props) => {
     setPageSize(size);
   }
 
-  if (!gamesChunks || gamesChunks.length === 0) return null;
+  if (uiState.loading) return <Spinner/>;
+
+  if (!gamesChunks || gamesChunks.length === 0) return (
+    <div className="container align-items-center">
+      <div className="row">
+        <div className="alert alert-warning">Не удалось загрузить игры из базы данных</div>
+      </div>
+    </div>
+
+  );
 
   return (
     <div className="container">

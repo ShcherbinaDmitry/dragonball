@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { filterGames, sortGames } from '../../slices/gamesSlice';
-import ModalComponent from '../modal/Modal.js';
+import { filterGames, sortGames } from '../../slices/gamesSlice.js';
 import cn from 'classnames';
+
+import ModalComponent from '../modal/Modal.js';
 
 const sortValues = [
   { value: "name", text: 'Название'},
@@ -15,8 +16,8 @@ const Topbar = ({ setFilter }) => {
   const dispatch = useDispatch();
   const [modal, setModal] = useState('');
   const Modal = modal ? <ModalComponent handleModal={setModal} type='add'/> : null;
-  const activeSort = useSelector((state) => state.games.activeSort.type);
-
+  const activeSort = useSelector((state) => state.games.uiState.sort);
+ 
   const handleClick = () => {
     setModal(!modal);
   };
@@ -36,7 +37,9 @@ const Topbar = ({ setFilter }) => {
       return (
         <button
           key={i}
-          onClick={() => dispatch(sortGames(btn.value))}
+          onClick={() => {
+            dispatch(sortGames(btn.value));         
+          }}
           className={btnClasses}>
             {btn.text}
         </button>
