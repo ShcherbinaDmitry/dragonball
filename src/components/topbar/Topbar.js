@@ -24,8 +24,8 @@ const Topbar = ({ setFilter }) => {
 
   const handleFilter = (e) => {
     e.preventDefault();
-    const { value } = e.target.filter;
-    console.log(e.target.filter.value);
+    const { value } = e.target;
+    console.log(e.target.value);
 
     dispatch(filterGames(value));
   };
@@ -50,8 +50,8 @@ const Topbar = ({ setFilter }) => {
   return (
     <nav className="navbar navbar-light bg-light sticky-top mb-3">
       <div className="container-fluid">
-        <form className="d-flex" onSubmit={handleFilter}>
-          <input className="form-control" name="filter-string" id="filter" placeholder="Найти игру"/>
+        <form className="d-flex">
+          <input onChange={handleFilter} className="form-control" name="filter-string" id="filter" placeholder="Найти игру"/>
           <button className="btn btn-outline-primary" type="sumbit">Поиск</button>
         </form>
         <div className="btn-group">

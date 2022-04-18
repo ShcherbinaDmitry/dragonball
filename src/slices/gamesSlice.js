@@ -50,7 +50,7 @@ const initialState = {
     loading: false,
     sort: 'updatedAt',
     asc: true,
-    filter: '',
+    filterStr: '',
   }
 };
 
@@ -59,6 +59,7 @@ const gamesSlice = createSlice({
   initialState,
   reducers: {
     filterGames: (state, action) => {
+      state.uiState.filterStr = action.payload.trim().toLowerCase();
     },
     sortGames: (state, action) => {
       const { payload } = action;

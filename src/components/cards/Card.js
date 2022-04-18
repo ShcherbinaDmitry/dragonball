@@ -35,6 +35,8 @@ const Card = (props) => {
     } 
   } = props;
 
+  // console.log(image);
+
   const handleClick = (e) => {
     e.preventDefault();
 
@@ -46,6 +48,10 @@ const Card = (props) => {
   const kitBadges = kit
     .map((badge) => <div key={`${badge}-${id}`} className="col-auto bg-primary badge">{translation[badge] || badge}</div>);
   const Modal = modal ? <ModalComponent handleModal={setModal} values={props.game} type='edit'/> : null;
+  
+  // if (image) {
+  //   return <img src={image} alt="Game cover" />
+  // }
 
   return (
     <div className="col col-12 col-sm-12 col-lg-6 col-xl-4 mb-3">
@@ -66,7 +72,10 @@ const Card = (props) => {
           <button type="btn" className="btn btn-outline-primary m-2 col-auto align-self-end" onClick={handleClick}>
             Редактировать
           </button>
-          {isNew && <p className="card-text align-self-end col-auto">! Новая !</p>}
+          
+          {isNew && <div className="card-text col">
+            <img className="img-fluid float-end" alt="New icon" src="new.ico"/>
+          </div>}
           <p className="card-text align-self-end col-12"><small className="text-muted">Последнее обновление: {updatedDate}</small></p>
  
         </div>

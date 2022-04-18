@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Pagination, Form } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
 import { chunk } from 'lodash';
 import { fetchGames } from '../../slices/gamesSlice.js';
 
@@ -18,9 +17,13 @@ const Cards = (props) => {
 
   const uiState = useSelector((state) => state.games.uiState);
   const gamesChunks = useSelector((state) => {
+    const { filterStr } = uiState;
     const { games } = state.games;
 
-    const chunks = chunk(games, pageSize);
+    const filteredGames = games.filter((game) => {
+      return game.platform.toLowerCase().includes(filterStr) || game.region.toLowerCase().includes(filterStr)
+    });
+    const chunks = chunk(filteredGames, pageSize);
 
     return chunks.map((items, index) => ({ items, pageNumber: index }));
   });
@@ -39,7 +42,7 @@ const Cards = (props) => {
   if (!gamesChunks || gamesChunks.length === 0) return (
     <div className="container align-items-center">
       <div className="row">
-        <div className="alert alert-warning">Не удалось загрузить игры из базы данных</div>
+        <div className="alert alert-warning">Нет подходящих игр</div>
       </div>
     </div>
 
