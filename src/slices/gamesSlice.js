@@ -65,6 +65,9 @@ const gamesSlice = createSlice({
   name: 'games',
   initialState,
   reducers: {
+    resetState: (state, action) => {
+      state = initialState;
+    },
     filterGames: (state, action) => {
       state.uiState.filterStr = action.payload.trim().toLowerCase();
     },
@@ -110,9 +113,7 @@ const gamesSlice = createSlice({
         state.uiState.loading = true;
       })
       .addMatcher(isFulfilled, (state, action) => {
-        // console.log(action);
         state.uiState.loading = false;
-        console.log(action.type);
 
         switch (action.type) {
           case "games/addGame/fulfilled": 
@@ -135,12 +136,13 @@ const gamesSlice = createSlice({
         // console.log(action);
 
         state.uiState.loading = false;
+      
 
         toast.error("Произошла ошибка");
       });
   },
 });
 
-export const { filterGames, sortGames } = gamesSlice.actions;
+export const { filterGames, sortGames, resetState } = gamesSlice.actions;
 
 export default gamesSlice.reducer;

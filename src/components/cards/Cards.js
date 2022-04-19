@@ -39,14 +39,15 @@ const Cards = (props) => {
 
   if (uiState.loading) return <Spinner/>;
 
-  if (!gamesChunks || gamesChunks.length === 0) return (
-    <div className="container align-items-center">
-      <div className="row">
-        <div className="alert alert-warning">Нет подходящих игр</div>
+  if (!gamesChunks || gamesChunks.length === 0) {
+    return (
+      <div className="container align-items-center">
+        <div className="row">
+          <div className="alert alert-warning">Нет подходящих игр</div>
+        </div>
       </div>
-    </div>
-
-  );
+    );
+  }
 
   return (
     <div className="container">
