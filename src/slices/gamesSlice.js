@@ -43,6 +43,13 @@ export const removeGame = createAsyncThunk(
   },
 );
 
+export const uploadImage = createAsyncThunk(
+  'games/uploadImage',
+  async (image) => {
+    await axios.put('http://localhost:3000/api/upload', image);
+  }
+);
+
 const initialState = {
   games: [],
   uiState: {
@@ -116,6 +123,8 @@ const gamesSlice = createSlice({
             break;
           case "games/removeGame/fulfilled":
             toast.warning('Игра успешно удалена');
+            break;
+          case "games/uploadImage/fulfilled":
             break;
           default:
             toast.success('Загружен список игр');

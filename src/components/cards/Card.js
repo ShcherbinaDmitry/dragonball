@@ -36,6 +36,7 @@ const Card = (props) => {
   } = props;
 
   // console.log(image);
+  const imagePath = `http://localhost:3000/public/${image}`;
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -51,37 +52,39 @@ const Card = (props) => {
     .map((badge) => <div key={`${badge}-${id}`} className="col-auto bg-primary badge">{translation[badge] || badge}</div>);
   const Modal = modal ? <ModalComponent handleModal={setModal} values={props.game} type='edit'/> : null;
   
-  // if (image) {
-  //   return <img src={image} alt="Game cover" />
+  // if (image.includes('.jpg')) {
+  //   return <img src={imagePath} alt="Game cover" />
   // }
 
   return (
-    <div className="col col-12 col-sm-12 col-lg-6 col-xl-4 mb-3">
-      <div className="card h-100">
-        <img src="https://images.immediate.co.uk/production/volatile/sites/3/2021/01/Dragon-Ball-1-a5dc289.jpg?quality=90&webp=true&resize=864,576"
-          className="card-img-top"
+    <div className="card col-sm-12 col-md-6 col-lg-4">
+        <img src={imagePath}
+          style={{objectFit: 'contain'}}
+          className="card-img-top img-fluid h-50 border"
           alt="Game cover"/>
-        <div className="card-body row align-items-start">
+        <div className="card-body d-flex flex-column">
           <h5 className="card-title">Name: {name}</h5>
           {jpname && <p className="card-text">Японкое название: {jpname}</p>}
           <p className="card-text col-6">Регион: {translation[region] || region}</p>
           <p className="card-text col-6">Платформа: {platform}</p>
           {condition && <p className="card-text col-auto">Состояние: {translation[condition] || condition}</p>}
           {note && <p className="card-text col-12">Описание: {note}</p>}
-          {kitBadges && <div className="col-12">
-            {kitBadges}
-          </div>}
-          <button type="btn" className="btn btn-outline-primary m-2 col-auto align-self-end" onClick={handleClick}>
+          {
+            kitBadges.length > 0 && 
+            <div className="col-12 mb-3">
+              {kitBadges}
+            </div>
+          }
+          <button type="btn" className="mt-auto align-self-center btn btn-outline-primary" onClick={handleClick}>
             Редактировать
           </button>
-          
-          {isNew && <div className="card-text col">
-            <img className="img-fluid float-end" alt="New icon" src="new.ico"/>
-          </div>}
-          <p className="card-text align-self-end col-12"><small className="text-muted">Последнее обновление: {updatedDate}</small></p>
- 
-        </div>
       </div>
+      <div className="card-footer d-flex">
+          <div className="col-9">
+            <small className="text-muted">Последнее обновление: {updatedDate}</small>
+          </div>
+          {isNew && <img className="img-fluid col-3" alt="New icon" src="new.ico"/>}
+          </div>
       {Modal}
     </div>
     );

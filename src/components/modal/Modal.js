@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useFormik } from 'formik';
+import { FormikContext, useFormik } from 'formik';
 import { Modal, Form } from 'react-bootstrap';
 import Multiselect from 'multiselect-react-dropdown';
 import * as yup from 'yup';
 import cn from 'classnames';
 
-import { addGame, removeGame, updateGame } from '../../slices/gamesSlice';
+import { addGame, removeGame, updateGame, uploadImage } from '../../slices/gamesSlice';
 
 // BEGIN (write your solution here)
 const getModalInfo = {
@@ -35,10 +35,12 @@ const kitValues = [
 ];
 
 const ModalComponent = ({ handleModal, type, values = {} }) => {
+  const imageFormats = ["image/png", "image/svg", "image/jpeg"];
   const dispatch = useDispatch();
   const { header, handler, infoRequired, isRemovable } = getModalInfo[type];
   const inputEl = useRef(null);
   const [isInvalid, setValidation] = useState(false);
+  const [file, setFileData] = useState(null);
 
   useEffect(() => {
     inputEl.current.focus();
@@ -54,6 +56,11 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
     
     formik.setFieldValue('kit', stringValues);
   };
+
+  const handleImageChange = (e) => {
+    setFileData(e.target.files[0]);
+    formik.setFieldValue('image', e.target.files[0].name);
+  }
 
   const gameSchema = yup.object().shape({
     name: yup.string().min(6).required('Required'),
@@ -79,11 +86,16 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
       ...values,
     },
     onSubmit: (values) => {
-      formik.validateForm();
+      // formik.validateForm();
+
+
+      const data = new FormData();
+      data.append('image', file);
       setValidation(false);
 
       try {
         dispatch(handler(values));
+        dispatch(uploadImage(data))
         handleModal(false);
       } catch (err) { 
         setValidation(true);
@@ -129,8 +141,10 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
 
           <div className="input-group mb-3">
             <input
+              
               className="form-control"
-              onChange={formik.handleChange}
+              
+              onChange={handleImageChange}
               id="image"
               name="image"
               required={infoRequired}
@@ -176,7 +190,6 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
           </select>
           
           <label htmlFor="kit" className="form-label select-label">Комплектация</label>
-          
           <Multiselect
             className="mb-3"
             options={kitValues}

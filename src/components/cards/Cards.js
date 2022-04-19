@@ -51,7 +51,7 @@ const Cards = (props) => {
   return (
     <div className="container">
       <div className="row">
-         {gamesChunks[currentPage].items.map((game) => <Card key={game._id} game={game}/>)}
+          {gamesChunks[currentPage].items.map((game) => <Card key={game._id} game={game}/>)}
       </div>
       <div className="row">
         <div className="col-2">
