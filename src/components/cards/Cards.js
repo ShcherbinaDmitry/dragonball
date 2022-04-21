@@ -5,7 +5,7 @@ import { chunk } from 'lodash';
 import { fetchGames } from '../../slices/gamesSlice.js';
 
 import Card from './Card';
-import Spinner from '../spinner/spinner.js';
+import Spinner from '../spinner/Spinner.js';
 
 const pageSizes = [6, 12, 24, 60];
 
@@ -15,20 +15,33 @@ const Cards = (props) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(pageSizes[0]);
 
-  const uiState = useSelector((state) => state.games.uiState);
+  const uiState = useSelector((state) => state.games.uiState); 
   const gamesChunks = useSelector((state) => {
-    const { filterStr } = uiState;
+    const { searchStr, filterQuery: { regions, platforms, isAvailable } } = uiState;
     const { games } = state.games;
 
     const filteredGames = games.filter((game) => {
-      return game.platform.toLowerCase().includes(filterStr) || game.region.toLowerCase().includes(filterStr)
+      // Check if available and if game matches filter query
+      if (isAvailable && game.kit.length === 0) return false; 
+      if (regions.length > 0 && !regions.includes(game.region)) return false;
+      if (platforms.length > 0 && !platforms.includes(game.platform)) return false;
+
+      return true;
     });
-    const chunks = chunk(filteredGames, pageSize);
+
+    // Search game based on search input
+    const searchedGames = filteredGames.filter((game) => {
+      return game.name.toLowerCase().includes(searchStr);
+    });
+
+    // Show games in chunks for pagination
+    const chunks = chunk(searchedGames, pageSize);
 
     return chunks.map((items, index) => ({ items, pageNumber: index }));
   });
   
   useEffect(() => {
+    // uploadGames everytime we do something
     dispatch(fetchGames());
   }, [dispatch]);
 

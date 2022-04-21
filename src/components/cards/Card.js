@@ -51,16 +51,12 @@ const Card = (props) => {
   const kitBadges = kit
     .map((badge) => <div key={`${badge}-${id}`} className="col-auto bg-primary badge">{translation[badge] || badge}</div>);
   const Modal = modal ? <ModalComponent handleModal={setModal} values={props.game} type='edit'/> : null;
-  
-  // if (image.includes('.jpg')) {
-  //   return <img src={imagePath} alt="Game cover" />
-  // }
 
   return (
     <div className="card col-sm-12 col-md-6 col-lg-4 p-2">
       <img src={imagePath}
         style={{objectFit: 'contain'}}
-        className="card-img-top img-fluid h-50 border"
+        className="card-img-top img-fluid border"
         alt="Game cover"/>
       <div className="card-body d-flex flex-column">
         <h5 className="card-title">Name: {name}</h5>

@@ -1,15 +1,14 @@
-import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { orderBy } from 'lodash';
 import { createSlice, createAsyncThunk, isRejected, isFulfilled, isPending } from '@reduxjs/toolkit';
 import { toast } from "react-toastify";
 
-const apiBase = 'http://localhost:3000/api/games';
+const apiBase = 'http://localhost:3000/api';
 
 export const fetchGames = createAsyncThunk(
   'games/fetchGames',
   async () => {
-    const { data } = await axios.get(apiBase);
+    const { data } = await axios.get(`${apiBase}/games`);
 
     return data;
   },
@@ -18,7 +17,7 @@ export const fetchGames = createAsyncThunk(
 export const addGame = createAsyncThunk(
   'games/addGame',
   async (game) => {
-    const { data } = await axios.post(apiBase, game);
+    const { data } = await axios.post(`${apiBase}/games`, game);
 
     return data;
   },
@@ -28,7 +27,7 @@ export const updateGame = createAsyncThunk(
   'games/updateGame',
   async (game) => {
     const { _id } = game;
-    await axios.put(`${apiBase}/${_id}`, game);
+    await axios.put(`${apiBase}/games/${_id}`, game);
     
     return game;
   }
@@ -37,7 +36,7 @@ export const updateGame = createAsyncThunk(
 export const removeGame = createAsyncThunk(
   'games/removeGame',
   async (id) => {
-    await axios.delete(`${apiBase}/${id}`);
+    await axios.delete(`${apiBase}/games/${id}`);
 
     return id;
   },
@@ -46,7 +45,7 @@ export const removeGame = createAsyncThunk(
 export const uploadImage = createAsyncThunk(
   'games/uploadImage',
   async (image) => {
-    await axios.put('http://localhost:3000/api/upload', image);
+    await axios.put(`${apiBase}/upload`, image);
   }
 );
 
@@ -54,10 +53,16 @@ const initialState = {
   games: [],
   uiState: {
     error: null,
-    loading: false,
+    loading: true,
     sort: 'updatedAt',
     asc: true,
-    filterStr: '',
+    filterQuery: {
+      regions: [],
+      platforms: [],
+      isAvailable: false,
+    },
+    filterAvailable: false,
+    searchStr: '',
   }
 };
 
@@ -65,11 +70,20 @@ const gamesSlice = createSlice({
   name: 'games',
   initialState,
   reducers: {
-    resetState: (state, action) => {
+    resetState: (state) => {
       state = initialState;
     },
-    filterGames: (state, action) => {
-      state.uiState.filterStr = action.payload.trim().toLowerCase();
+    filterGamesByPlatform: (state, action) => {
+      state.uiState.filterQuery.platforms = action.payload;
+    },
+    filterGamesByRegion: (state, action) => {
+      state.uiState.filterQuery.regions = action.payload;
+    },
+    filterByAvailable: (state) => {
+      state.uiState.filterQuery.isAvailable = !state.uiState.filterQuery.isAvailable;
+    },
+    searchGames: (state, action) => {
+      state.uiState.searchStr = action.payload.trim().toLowerCase();
     },
     sortGames: (state, action) => {
       const { payload } = action;
@@ -90,6 +104,7 @@ const gamesSlice = createSlice({
     builder
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.games = action.payload;
+        // console.log('Fetched!');
       })
       .addCase(addGame.fulfilled, (state, action) => {
         state.games = [action.payload, ...state.games];
@@ -134,15 +149,13 @@ const gamesSlice = createSlice({
       .addMatcher(isRejected, (state, action) => {
         // console.log('Rejected!');
         // console.log(action);
-
         state.uiState.loading = false;
       
-
         toast.error("Произошла ошибка");
       });
   },
 });
 
-export const { filterGames, sortGames, resetState } = gamesSlice.actions;
+export const { filterGamesByPlatform, filterGamesByRegion, filterByAvailable, sortGames, searchGames, resetState } = gamesSlice.actions;
 
 export default gamesSlice.reducer;
