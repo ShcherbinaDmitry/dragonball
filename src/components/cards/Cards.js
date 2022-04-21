@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Pagination, Form } from 'react-bootstrap';
 import { chunk } from 'lodash';
 import { fetchGames } from '../../slices/gamesSlice.js';
+import Fuse from 'fuse.js';
 
 import Card from './Card';
 import Spinner from '../spinner/Spinner.js';
@@ -29,10 +30,13 @@ const Cards = (props) => {
       return true;
     });
 
-    // Search game based on search input
-    const searchedGames = filteredGames.filter((game) => {
-      return game.name.toLowerCase().includes(searchStr);
+    const fuse = new Fuse(filteredGames, {
+      keys: ['name'],
+      threshold: 0.4,
     });
+
+    // Search game based on search input
+    const searchedGames = searchStr ? fuse.search(searchStr).map((game) => game.item) : filteredGames;
 
     // Show games in chunks for pagination
     const chunks = chunk(searchedGames, pageSize);
@@ -43,6 +47,7 @@ const Cards = (props) => {
   useEffect(() => {
     // uploadGames everytime we do something
     dispatch(fetchGames());
+    console.log('Used effect');
   }, [dispatch]);
 
   const handleSize = (size) => {

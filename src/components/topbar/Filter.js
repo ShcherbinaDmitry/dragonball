@@ -41,7 +41,7 @@ const FilterCompontent = (props) => {
   if (isLoading) return null;
 
   return (
-    <div className="">
+    <div className="mb-3">
       <div className="form-check form-switch" >
         <input onChange={handleAvailableCheck} className="form-check-input" type="checkbox" id="flexSwitchCheckDefault"/>
         <label className="form-check-label" htmlFor="flexSwitchCheckDefault">В наличии</label>
@@ -52,6 +52,7 @@ const FilterCompontent = (props) => {
           onSelect={handleRegionSelect}
           onRemove={handleRegionSelect}
           placeholder="Регионы"
+          hidePlaceholder={true}
           displayValue="name"
           name="filterRegions"
           id="filterRegions"
@@ -63,6 +64,7 @@ const FilterCompontent = (props) => {
           onSelect={handlePlatformSelect}
           onRemove={handlePlatformSelect}
           placeholder="Платформы"
+          hidePlaceholder={true}
           displayValue="name"
           name="filterPlatforms"
           id="filterPlatforms"

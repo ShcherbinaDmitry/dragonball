@@ -86,9 +86,6 @@ const ModalComponent = ({ handleModal, type, values = {} }) => {
       ...values,
     },
     onSubmit: (values) => {
-      // formik.validateForm();
-
-
       const data = new FormData();
       data.append('image', file);
       setValidation(false);

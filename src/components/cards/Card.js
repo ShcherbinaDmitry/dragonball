@@ -55,7 +55,7 @@ const Card = (props) => {
   return (
     <div className="card col-sm-12 col-md-6 col-lg-4 p-2">
       <img src={imagePath}
-        style={{objectFit: 'contain'}}
+        style={{objectFit: 'fill'}}
         className="card-img-top img-fluid border"
         alt="Game cover"/>
       <div className="card-body d-flex flex-column">

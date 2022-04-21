@@ -156,6 +156,13 @@ const gamesSlice = createSlice({
   },
 });
 
-export const { filterGamesByPlatform, filterGamesByRegion, filterByAvailable, sortGames, searchGames, resetState } = gamesSlice.actions;
+export const {
+  filterGamesByPlatform,
+  filterGamesByRegion,
+  filterByAvailable,
+  sortGames,
+  searchGames,
+  resetState
+} = gamesSlice.actions;
 
 export default gamesSlice.reducer;

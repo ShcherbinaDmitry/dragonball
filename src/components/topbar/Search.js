@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { searchGames } from '../../slices/gamesSlice';
 
 const SearchComponent = () => {
   const dispatch = useDispatch();
+  const games = useSelector((state) => state.games.games);
 
   const handleSearch = (e) => {
     e.preventDefault();
