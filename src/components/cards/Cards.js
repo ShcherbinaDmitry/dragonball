@@ -47,7 +47,6 @@ const Cards = (props) => {
   useEffect(() => {
     // uploadGames everytime we do something
     dispatch(fetchGames());
-    console.log('Used effect');
   }, [dispatch]);
 
   const handleSize = (size) => {

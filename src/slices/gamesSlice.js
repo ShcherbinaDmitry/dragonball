@@ -104,7 +104,6 @@ const gamesSlice = createSlice({
     builder
       .addCase(fetchGames.fulfilled, (state, action) => {
         state.games = action.payload;
-        // console.log('Fetched!');
       })
       .addCase(addGame.fulfilled, (state, action) => {
         state.games = [action.payload, ...state.games];
@@ -124,7 +123,6 @@ const gamesSlice = createSlice({
         state.games = state.games.filter((g) => g._id !== id);
       })
       .addMatcher(isPending, (state, action) => {
-        // console.log(action);
         state.uiState.loading = true;
       })
       .addMatcher(isFulfilled, (state, action) => {
@@ -147,8 +145,6 @@ const gamesSlice = createSlice({
         }
       })
       .addMatcher(isRejected, (state, action) => {
-        // console.log('Rejected!');
-        // console.log(action);
         state.uiState.loading = false;
       
         toast.error("Произошла ошибка");
